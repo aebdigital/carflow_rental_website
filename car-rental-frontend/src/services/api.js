@@ -1,5 +1,5 @@
-// Use relative URLs that will be proxied through Vite dev server
-const API_BASE = '/api';
+// Production API base URL
+const API_BASE = 'https://carflow-reservation-system.onrender.com/api';
 
 // Helper function to get auth token
 const getToken = () => localStorage.getItem('authToken');

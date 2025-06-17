@@ -8,9 +8,9 @@ export default defineConfig({
     port: 3006,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'https://carflow-reservation-system.onrender.com',
         changeOrigin: true,
-        secure: false,
+        secure: true,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
         configure: (proxy, options) => {
           proxy.on('error', (err, req, res) => {
