@@ -29,7 +29,7 @@ const BookingPage = () => {
       city: '',
       state: '',
       postalCode: '',
-      country: 'US'
+      country: 'SK'
     },
     returnLocation: {
       name: '',
@@ -37,7 +37,7 @@ const BookingPage = () => {
       city: '',
       state: '',
       postalCode: '',
-      country: 'US'
+      country: 'SK'
     },
     
     // Step 2: Personal Information (for new customers)
@@ -54,7 +54,7 @@ const BookingPage = () => {
       city: '',
       state: '',
       postalCode: '',
-      country: 'US'
+      country: 'SK'
     },
     
     // Step 3: Extras
@@ -67,36 +67,52 @@ const BookingPage = () => {
   });
 
   const steps = [
-    { number: 1, title: 'Rental Details' },
-    { number: 2, title: 'Customer Info' },
-    { number: 3, title: 'Review & Confirm' }
+    { number: 1, title: 'Detaily prenájmu' },
+    { number: 2, title: 'Informácie o zákazníkovi' },
+    { number: 3, title: 'Kontrola a potvrdenie' }
   ];
 
-  // Predefined locations
+  // Predefined locations - Slovak locations (Bratislava)
   const locations = [
     {
-      name: 'Downtown Office',
-      address: '123 Main Street',
-      city: 'New York',
-      state: 'NY',
-      postalCode: '10001',
-      country: 'US'
+      name: 'Centrum - Bratislava',
+      address: 'Hlavná 123',
+      city: 'Bratislava',
+      state: 'Bratislavský kraj',
+      postalCode: '821 08',
+      country: 'SK'
     },
     {
-      name: 'Airport Location',
-      address: 'JFK Airport Terminal 1',
-      city: 'Queens',
-      state: 'NY',
-      postalCode: '11430',
-      country: 'US'
+      name: 'Letisko - M. R. Štefánika',
+      address: 'Letisko M. R. Štefánika',
+      city: 'Bratislava',
+      state: 'Bratislavský kraj',
+      postalCode: '823 05',
+      country: 'SK'
     },
     {
-      name: 'Midtown Branch',
-      address: '456 5th Avenue',
-      city: 'New York',
-      state: 'NY',
-      postalCode: '10018',
-      country: 'US'
+      name: 'Petržalka - Bratislava',
+      address: 'Petržalská 456',
+      city: 'Bratislava',
+      state: 'Bratislavský kraj',
+      postalCode: '851 01',
+      country: 'SK'
+    },
+    {
+      name: 'Ružinov - Bratislava',
+      address: 'Ružinovská 789',
+      city: 'Bratislava',
+      state: 'Bratislavský kraj',
+      postalCode: '821 01',
+      country: 'SK'
+    },
+    {
+      name: 'Nové Mesto - Bratislava',
+      address: 'Nové Mesto 321',
+      city: 'Bratislava',
+      state: 'Bratislavský kraj',
+      postalCode: '831 01',
+      country: 'SK'
     }
   ];
 
@@ -136,8 +152,12 @@ const BookingPage = () => {
           ...prev,
           pickupDate: pickupDateParam ? new Date(pickupDateParam) : prev.pickupDate,
           returnDate: returnDateParam ? new Date(returnDateParam) : prev.returnDate,
-          pickupLocation: pickupLocationParam ? { name: pickupLocationParam } : prev.pickupLocation,
-          returnLocation: returnLocationParam ? { name: returnLocationParam } : prev.returnLocation,
+          pickupLocation: pickupLocationParam ? 
+            locations.find(loc => loc.name === pickupLocationParam) || { name: pickupLocationParam, address: '', city: 'Bratislava', state: 'Bratislavský kraj', postalCode: '', country: 'SK' } : 
+            prev.pickupLocation,
+          returnLocation: returnLocationParam ? 
+            locations.find(loc => loc.name === returnLocationParam) || { name: returnLocationParam, address: '', city: 'Bratislava', state: 'Bratislavský kraj', postalCode: '', country: 'SK' } : 
+            prev.returnLocation,
         }));
         
         // Load selected car
@@ -154,7 +174,7 @@ const BookingPage = () => {
             const availability = await carsAPI.getCarAvailability(selectedCarId, startDate, endDate);
             setUnavailableDates(availability.unavailableDates || []);
           } catch (err) {
-            console.warn('Could not load availability:', err);
+            console.warn('Nepodarilo sa načítať údaje rezervácie:', err);
             setUnavailableDates([]);
           }
         } else {
@@ -162,7 +182,7 @@ const BookingPage = () => {
         }
       } catch (err) {
         console.error('Failed to load data:', err);
-        setError('Failed to load booking data');
+        setError('Nepodarilo sa načítať údaje rezervácie');
       } finally {
         setLoading(false);
       }
@@ -530,9 +550,9 @@ const BookingPage = () => {
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h1 className="text-3xl font-bold text-gray-900">Complete Your Booking</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Dokončte vašu rezerváciu</h1>
           <p className="text-gray-600 mt-2">
-            Just a few steps to secure your rental car
+            Len pár krokov k zabezpečeniu vášho prenájmu
           </p>
         </div>
       </div>
@@ -542,7 +562,7 @@ const BookingPage = () => {
           {/* Progress Steps */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Booking Progress</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">Priebeh rezervácie</h3>
               <div className="space-y-4">
                 {steps.map((step) => (
                   <div key={step.number} className="flex items-center">
@@ -569,7 +589,7 @@ const BookingPage = () => {
               {/* Selected Car Summary */}
               {selectedCar && (
                 <div className="mt-8 border-t pt-6">
-                  <h4 className="font-semibold text-gray-900 mb-4">Selected Vehicle</h4>
+                  <h4 className="font-semibold text-gray-900 mb-4">Vybrané vozidlo</h4>
                   <div className="space-y-3">
                     <CarImage
                       car={selectedCar}
@@ -580,12 +600,12 @@ const BookingPage = () => {
                       <p className="font-medium">{selectedCar.brand} {selectedCar.model}</p>
                       <p className="text-sm text-gray-600">{selectedCar.category}</p>
                       <div className="mt-2">
-                        <p className="text-lg font-bold text-primary">${selectedCar.dailyRate}/day</p>
+                        <p className="text-lg font-bold text-primary">{selectedCar.dailyRate}€/deň</p>
                         {formData.pickupDate && formData.returnDate && (
                           <div className="text-sm text-gray-600 mt-1">
-                            <p>{calculateDays()} days = ${calculateTotal()}</p>
-                            <p>Deposit: ${selectedCar.deposit}</p>
-                            <p className="font-semibold">Total: ${calculateTotal() + selectedCar.deposit}</p>
+                            <p>{calculateDays()} dní = {calculateTotal()}€</p>
+                            <p>Záloha: {selectedCar.deposit}€</p>
+                            <p className="font-semibold">Celkom: {calculateTotal() + selectedCar.deposit}€</p>
                           </div>
                         )}
                       </div>
@@ -619,11 +639,11 @@ const BookingPage = () => {
                 {/* Step 1: Rental Details */}
                 {currentStep === 1 && (
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Rental Details</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Detaily prenájmu</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Pickup Date *
+                          Dátum prevzatia *
                         </label>
                         <DatePicker
                           selectedDate={formData.pickupDate}
@@ -635,7 +655,7 @@ const BookingPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Return Date *
+                          Dátum vrátenia *
                         </label>
                         <DatePicker
                           selectedDate={formData.returnDate}
@@ -647,34 +667,36 @@ const BookingPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Pickup Location *
+                          Miesto prevzatia *
                         </label>
                         <select
+                          value={formData.pickupLocation.name ? locations.findIndex(loc => loc.name === formData.pickupLocation.name) : ''}
                           onChange={(e) => handleLocationChange('pickupLocation', parseInt(e.target.value))}
                           className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
                           required
                         >
-                          <option value="">Select pickup location</option>
+                          <option value="">Vyberte miesto prevzatia</option>
                           {locations.map((location, index) => (
                             <option key={index} value={index}>
-                              {location.name} - {location.city}
+                              {location.name}
                             </option>
                           ))}
                         </select>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Return Location *
+                          Miesto vrátenia *
                         </label>
                         <select
+                          value={formData.returnLocation.name ? locations.findIndex(loc => loc.name === formData.returnLocation.name) : ''}
                           onChange={(e) => handleLocationChange('returnLocation', parseInt(e.target.value))}
                           className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
                           required
                         >
-                          <option value="">Select return location</option>
+                          <option value="">Vyberte miesto vrátenia</option>
                           {locations.map((location, index) => (
                             <option key={index} value={index}>
-                              {location.name} - {location.city}
+                              {location.name}
                             </option>
                           ))}
                         </select>
@@ -687,7 +709,7 @@ const BookingPage = () => {
                         onClick={nextStep}
                         disabled={!formData.pickupDate || !formData.returnDate || !formData.pickupLocation.name || !formData.returnLocation.name}
                       >
-                        Next Step
+                        Ďalší krok
                       </Button>
                     </div>
                   </div>
@@ -697,23 +719,23 @@ const BookingPage = () => {
                 {currentStep === 2 && (
                   <div>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                      {currentUser ? 'Confirm Your Information' : 'Customer Information'}
+                      {currentUser ? 'Potvrďte vaše údaje' : 'Informácie o zákazníkovi'}
                     </h2>
                     
                     {currentUser ? (
                       <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
-                        <p className="text-green-800">Welcome back, {currentUser.firstName}! Your information is pre-filled below.</p>
+                        <p className="text-green-800">Vitajte späť, {currentUser.firstName}! Vaše údaje sú predvyplnené nižšie.</p>
                       </div>
                     ) : (
                       <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
-                        <p className="text-blue-800">Please provide your information to create your customer account.</p>
+                        <p className="text-blue-800">Prosím zadajte vaše údaje pre vytvorenie zákazníckeho účtu.</p>
                       </div>
                     )}
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          First Name *
+                          Krstné meno *
                         </label>
                         <input
                           type="text"
@@ -727,7 +749,7 @@ const BookingPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Last Name *
+                          Priezvisko *
                         </label>
                         <input
                           type="text"
@@ -755,27 +777,27 @@ const BookingPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Phone Number *
+                          Telefónne číslo *
                         </label>
                         <input
                           type="tel"
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          placeholder="(555) 123-4567"
+                          placeholder="+421 XXX XXX XXX"
                           className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
                           required
                           disabled={!!currentUser}
                         />
                         <p className="text-xs text-gray-500 mt-1">
-                          Enter your phone number with or without formatting
+                          Zadajte telefónne číslo s alebo bez formátovania
                         </p>
                       </div>
                       
                       {!currentUser && (
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Password *
+                            Heslo *
                           </label>
                           <input
                             type="password"
@@ -791,7 +813,7 @@ const BookingPage = () => {
                       
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Date of Birth *
+                          Dátum narodenia *
                         </label>
                         <input
                           type="date"
@@ -805,7 +827,7 @@ const BookingPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Driver's License Number *
+                          Vodičský preukaz *
                         </label>
                         <input
                           type="text"
@@ -819,7 +841,7 @@ const BookingPage = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          License Expiry Date *
+                          Dátum expirácie vodičského preukazu *
                         </label>
                         <input
                           type="date"
@@ -832,18 +854,18 @@ const BookingPage = () => {
                           disabled={!!currentUser}
                         />
                         <p className="text-xs text-gray-500 mt-1">
-                          Your driver's license must be valid throughout the rental period
+                          Váš vodičský preukaz musí byť platný počas celého obdobia prenájmu
                         </p>
                       </div>
                     </div>
 
                     {/* Address */}
                     <div className="mt-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Address</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Adresa</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="md:col-span-2">
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Street Address *
+                            Ulica a číslo *
                           </label>
                           <input
                             type="text"
@@ -857,7 +879,7 @@ const BookingPage = () => {
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            City *
+                            Mesto *
                           </label>
                           <input
                             type="text"
@@ -871,7 +893,7 @@ const BookingPage = () => {
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            State *
+                            Kraj *
                           </label>
                           <input
                             type="text"
@@ -885,7 +907,7 @@ const BookingPage = () => {
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Postal Code *
+                            PSČ *
                           </label>
                           <input
                             type="text"
@@ -902,10 +924,10 @@ const BookingPage = () => {
                     
                     <div className="flex justify-between mt-8">
                       <Button type="button" variant="outline" onClick={prevStep}>
-                        Previous
+                        Späť
                       </Button>
                       <Button type="button" onClick={nextStep}>
-                        Next Step
+                        Ďalší krok
                       </Button>
                     </div>
                   </div>
@@ -1000,7 +1022,7 @@ const BookingPage = () => {
                     
                     <div className="flex justify-between">
                       <Button type="button" variant="outline" onClick={prevStep}>
-                        Previous
+                        Späť
                       </Button>
                       <Button 
                         type="submit" 
