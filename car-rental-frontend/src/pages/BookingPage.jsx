@@ -454,20 +454,20 @@ const BookingPage = () => {
               <CheckCircleIcon className="w-16 h-16 mx-auto" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Booking Confirmed!
+              Rezervácia potvrdená!
             </h1>
             <p className="text-gray-600 mb-8">
-              Your reservation has been successfully created.
+              Vaša rezervácia bola úspešne vytvorená.
             </p>
             
             {/* New account credentials info */}
             {bookingResult.credentials && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
                 <h3 className="text-lg font-semibold text-blue-900 mb-3">
-                  🎉 Account Created Successfully!
+                  🎉 Účet úspešne vytvorený!
                 </h3>
                 <p className="text-blue-800 mb-4">
-                  We've created a customer account for you. Save these login credentials:
+                  Vytvorili sme pre vás zákaznícky účet. Uložte si tieto prihlasovacie údaje:
                 </p>
                 <div className="bg-white rounded-md p-4 text-left">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -476,53 +476,53 @@ const BookingPage = () => {
                       <code className="bg-gray-100 px-2 py-1 rounded text-sm">{bookingResult.credentials.email}</code>
                     </div>
                     <div>
-                      <strong>Password:</strong><br />
+                      <strong>Heslo:</strong><br />
                       <code className="bg-gray-100 px-2 py-1 rounded text-sm">{bookingResult.credentials.password}</code>
                     </div>
                   </div>
                 </div>
                 <p className="text-blue-700 mt-3 text-sm">
-                  You can use these credentials to log in and manage your reservations in the future.
+                  Tieto údaje môžete použiť na prihlásenie a správu vašich rezervácií v budúcnosti.
                 </p>
               </div>
             )}
             
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
-              <h3 className="text-lg font-semibold mb-4">Reservation Details</h3>
+              <h3 className="text-lg font-semibold mb-4">Detaily rezervácie</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                 <div>
-                  <strong>Reservation Number:</strong><br />
+                  <strong>Číslo rezervácie:</strong><br />
                   {bookingResult.reservation.reservationNumber || bookingResult.reservation._id}
                 </div>
                 <div>
-                  <strong>Vehicle:</strong><br />
+                  <strong>Vozidlo:</strong><br />
                   {bookingResult.car.brand} {bookingResult.car.model} ({bookingResult.car.year})
                 </div>
                 <div>
-                  <strong>Pickup Date:</strong><br />
+                  <strong>Dátum prevzatia:</strong><br />
                   {formData.pickupDate?.toLocaleDateString()}
                 </div>
                 <div>
-                  <strong>Return Date:</strong><br />
+                  <strong>Dátum vrátenia:</strong><br />
                   {formData.returnDate?.toLocaleDateString()}
                 </div>
                 <div>
-                  <strong>Total Cost:</strong><br />
-                  ${bookingResult.costs.totalCost}{bookingResult.costs.deposit > 0 ? ` (including $${bookingResult.costs.deposit} deposit)` : ''}
+                  <strong>Celkové náklady:</strong><br />
+                  ${bookingResult.costs.totalCost}{bookingResult.costs.deposit > 0 ? ` (vrátane $${bookingResult.costs.deposit} zálohy)` : ''}
                 </div>
                 <div>
-                  <strong>Rental Days:</strong><br />
-                  {bookingResult.costs.days} days
+                  <strong>Dni prenájmu:</strong><br />
+                  {bookingResult.costs.days} dní
                 </div>
               </div>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button onClick={() => navigate('/fleet')}>
-                Browse More Cars
+                Prehľadať viac áut
               </Button>
               <Button variant="outline" onClick={() => navigate('/')}>
-                Back to Home
+                Späť na domov
               </Button>
               {bookingResult.credentials && (
                 <Button variant="accent" onClick={() => {
@@ -535,7 +535,7 @@ const BookingPage = () => {
                       navigate('/'); // Fallback to home if login fails
                     });
                 }}>
-                  Login to Your Account
+                  Prihlásiť sa do účtu
                 </Button>
               )}
             </div>
@@ -936,36 +936,36 @@ const BookingPage = () => {
                 {/* Step 3: Review & Confirm */}
                 {currentStep === 3 && (
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Review & Confirm</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Prehľad a potvrdenie</h2>
                     
                     {/* Booking Summary */}
                     <div className="bg-gray-50 rounded-lg p-6 mb-6">
-                      <h3 className="text-lg font-semibold mb-4">Booking Summary</h3>
+                      <h3 className="text-lg font-semibold mb-4">Súhrn rezervácie</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <strong>Vehicle:</strong><br />
+                          <strong>Vozidlo:</strong><br />
                           {selectedCar?.brand} {selectedCar?.model} ({selectedCar?.year})
                         </div>
                         <div>
-                          <strong>Category:</strong><br />
+                          <strong>Kategória:</strong><br />
                           {selectedCar?.category}
                         </div>
                         <div>
-                          <strong>Pickup:</strong><br />
+                          <strong>Prevzatie:</strong><br />
                           {formData.pickupDate?.toLocaleDateString()}<br />
                           {formData.pickupLocation.name}
                         </div>
                         <div>
-                          <strong>Return:</strong><br />
+                          <strong>Vrátenie:</strong><br />
                           {formData.returnDate?.toLocaleDateString()}<br />
                           {formData.returnLocation.name}
                         </div>
                         <div>
-                          <strong>Duration:</strong><br />
-                          {calculateDays()} days
+                          <strong>Trvanie:</strong><br />
+                          {calculateDays()} dní
                         </div>
                         <div>
-                          <strong>Customer:</strong><br />
+                          <strong>Zákazník:</strong><br />
                           {formData.firstName} {formData.lastName}<br />
                           {formData.email}
                         </div>
@@ -974,18 +974,18 @@ const BookingPage = () => {
 
                     {/* Pricing Breakdown */}
                     <div className="bg-gray-50 rounded-lg p-6 mb-6">
-                      <h3 className="text-lg font-semibold mb-4">Pricing Breakdown</h3>
+                      <h3 className="text-lg font-semibold mb-4">Rozpis cien</h3>
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <span>Daily Rate ({calculateDays()} days):</span>
+                          <span>Denná sadzba ({calculateDays()} dní):</span>
                           <span>${calculateTotal()}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Security Deposit:</span>
+                          <span>Bezpečnostná záloha:</span>
                           <span>${selectedCar?.deposit || 0}</span>
                         </div>
                         <div className="border-t pt-2 flex justify-between font-semibold text-lg">
-                          <span>Total Amount:</span>
+                          <span>Celková suma:</span>
                           <span>${calculateTotal() + (selectedCar?.deposit || 0)}</span>
                         </div>
                       </div>
@@ -994,7 +994,7 @@ const BookingPage = () => {
                     {/* Special Requests */}
                     <div className="mb-6">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Special Requests (Optional)
+                        Špeciálne požiadavky (voliteľné)
                       </label>
                       <textarea
                         name="specialRequests"
@@ -1002,7 +1002,7 @@ const BookingPage = () => {
                         onChange={handleInputChange}
                         rows={3}
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
-                        placeholder="Any special requests or requirements..."
+                        placeholder="Akékoľvek špeciálne požiadavky alebo požiadavky..."
                       />
                     </div>
 
@@ -1015,7 +1015,7 @@ const BookingPage = () => {
                           className="mt-1 text-accent focus:ring-accent"
                         />
                         <span className="ml-2 text-sm text-gray-700">
-                          I agree to the <a href="/terms" className="text-accent hover:underline">Terms and Conditions</a> and <a href="/privacy" className="text-accent hover:underline">Privacy Policy</a>
+                          Súhlasím s <a href="/terms" className="text-accent hover:underline">Obchodnými podmienkami</a> a <a href="/privacy" className="text-accent hover:underline">Zásadami ochrany súkromia</a>
                         </span>
                       </label>
                     </div>
@@ -1032,10 +1032,10 @@ const BookingPage = () => {
                         {loading ? (
                           <>
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                            Processing...
+                            Spracováva sa...
                           </>
                         ) : (
-                          'Confirm Booking'
+                          'Potvrdiť rezerváciu'
                         )}
                       </Button>
                     </div>
