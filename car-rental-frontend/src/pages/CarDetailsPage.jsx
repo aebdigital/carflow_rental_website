@@ -372,28 +372,28 @@ const CarDetailsPage = () => {
 
                 {/* Pricing Information */}
                 <div className="bg-gray-50 rounded-lg p-4 space-y-3 border">
-                  <h4 className="font-semibold text-gray-900">Pricing Details</h4>
+                  <h4 className="font-semibold text-gray-900">Cenové detaily</h4>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Allowed kilometers:</span>
-                    <span className="font-semibold text-gray-900">{bookingData.allowedKm} km</span>
+                    <span className="text-gray-600">Povolené kilometre:</span>
+                    <span className="font-semibold text-gray-900">{bookingData.allowedKm || 0} km</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Rental price:</span>
-                    <span className="font-semibold text-primary text-lg">${calculatePrice().toFixed(2)}</span>
+                    <span className="text-gray-600">Cena prenájmu:</span>
+                    <span className="font-semibold text-primary text-lg">{calculatePrice().toFixed(2)}€</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Price per excess km:</span>
-                    <span className="font-semibold text-gray-900">$0.30</span>
+                    <span className="text-gray-600">Cena za nadmerný km:</span>
+                    <span className="font-semibold text-gray-900">0,30€</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Deposit:</span>
-                    <span className="font-semibold text-gray-900">${getDeposit().toFixed(2)}</span>
+                    <span className="text-gray-600">Záloha:</span>
+                    <span className="font-semibold text-gray-900">{getDeposit().toFixed(2)}€</span>
                   </div>
                 </div>
 
                 {/* Deposit Options */}
                 <div className="space-y-3">
-                  <h4 className="font-medium text-gray-900">Coverage Options</h4>
+                  <h4 className="font-medium text-gray-900">Možnosti poistenia</h4>
                   <label className="flex items-center space-x-3 cursor-pointer">
                     <input
                       type="radio"
@@ -403,7 +403,7 @@ const CarDetailsPage = () => {
                       onChange={(e) => handleInputChange('depositOption', e.target.value)}
                       className="text-primary focus:ring-primary"
                     />
-                    <span className="text-gray-700">Standard Coverage</span>
+                    <span className="text-gray-700">Štandardné poistenie</span>
                   </label>
                   <label className="flex items-center space-x-3 cursor-pointer">
                     <input
@@ -414,7 +414,7 @@ const CarDetailsPage = () => {
                       onChange={(e) => handleInputChange('depositOption', e.target.value)}
                       className="text-primary focus:ring-primary"
                     />
-                    <span className="text-gray-700">Extended Coverage (+30% deposit)</span>
+                    <span className="text-gray-700">Rozšírené poistenie (+30% záloha)</span>
                   </label>
                 </div>
 
@@ -425,7 +425,7 @@ const CarDetailsPage = () => {
                   className="mt-6"
                   disabled={car.status !== 'available'}
                 >
-                  {car.status === 'available' ? 'Reserve Now' : 'Currently Unavailable'}
+                  {car.status === 'available' ? 'Rezervovať teraz' : 'Momentálne nedostupné'}
                 </Button>
               </div>
             </div>
