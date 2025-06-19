@@ -147,11 +147,6 @@ const CarCard = ({ car, selectedDates, unavailableDates = [] }) => {
             </div>
           )}
           
-          {/* Description */}
-          {description && (
-            <p className="text-gray-600 text-sm mb-3 line-clamp-2">{description}</p>
-          )}
-          
           <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
             {seats && (
               <div className="flex items-center space-x-2">
@@ -177,27 +172,6 @@ const CarCard = ({ car, selectedDates, unavailableDates = [] }) => {
             </div>
           </div>
         </div>
-
-        {/* Features */}
-        {features && features.length > 0 && (
-          <div className="mb-4">
-            <div className="flex flex-wrap gap-2">
-              {features.slice(0, 3).map((feature, index) => (
-                <span 
-                  key={index}
-                  className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs"
-                >
-                  {feature}
-                </span>
-              ))}
-              {features.length > 3 && (
-                <span className="text-gray-500 text-xs">
-                  +{features.length - 3} ďalších
-                </span>
-              )}
-            </div>
-          </div>
-        )}
 
         {/* Price */}
         <div className="flex items-center justify-between">
