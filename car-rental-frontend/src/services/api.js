@@ -1,6 +1,9 @@
 // Production API base URL
 const API_BASE = 'https://carflow-reservation-system.onrender.com/api';
 
+// Tenant-specific user email for all API calls
+const TENANT_EMAIL = 'admin@example.com';
+
 // Helper function to get auth token
 const getToken = () => localStorage.getItem('authToken');
 
@@ -84,16 +87,13 @@ export const authAPI = {
   }
 };
 
-// Cars API (Using Public Endpoints)
+// Cars API (Using Tenant-Specific Public Endpoints)
 export const carsAPI = {
-  // Get all available cars using PUBLIC endpoint
+  // Get all available cars for admin@example.com tenant
   getAvailableCars: async (filters = {}) => {
-    const queryParams = new URLSearchParams({
-      status: 'available',
-      ...filters
-    });
+    const queryParams = new URLSearchParams(filters);
 
-    const response = await fetch(`${API_BASE}/public/cars?${queryParams}`, {
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/cars?${queryParams}`, {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -105,9 +105,9 @@ export const carsAPI = {
     return result.data || [];
   },
 
-  // Get single car details using PUBLIC endpoint
+  // Get single car details for admin@example.com tenant
   getCarDetails: async (carId) => {
-    const response = await fetch(`${API_BASE}/public/cars/${carId}`, {
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/cars/${carId}`, {
       headers: {
         'Content-Type': 'application/json',
       }
@@ -117,7 +117,7 @@ export const carsAPI = {
     return result.data;
   },
 
-  // Get car availability for date range using PUBLIC endpoint
+  // Get car availability for date range for admin@example.com tenant
   getCarAvailability: async (carId, startDate, endDate) => {
     const queryParams = new URLSearchParams({
       startDate: startDate.toISOString().split('T')[0],
@@ -125,7 +125,7 @@ export const carsAPI = {
     });
 
     try {
-      const response = await fetch(`${API_BASE}/public/cars/${carId}/availability?${queryParams}`, {
+      const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/cars/${carId}/availability?${queryParams}`, {
         headers: {
           'Content-Type': 'application/json',
         }
@@ -137,16 +137,40 @@ export const carsAPI = {
       console.warn('Availability check failed, assuming all dates available:', error);
       return { unavailableDates: [] };
     }
+  },
+
+  // Get cars by category for admin@example.com tenant
+  getCarsByCategory: async (category) => {
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/cars/category/${category}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await handleResponse(response);
+    return result.data || [];
+  },
+
+  // Get available features for admin@example.com tenant
+  getAvailableFeatures: async () => {
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/features`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await handleResponse(response);
+    return result.data || [];
   }
 };
 
 // Reservations API
 export const reservationsAPI = {
-  // Create a new reservation using PUBLIC endpoint
+  // Create a new reservation for admin@example.com tenant using PUBLIC endpoint
   createPublicReservation: async (reservationData) => {
     console.log('Sending reservation data to backend:', reservationData);
     
-    const response = await fetch(`${API_BASE}/public/reservations`, {
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/reservations`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -214,18 +238,18 @@ export const reservationsAPI = {
 
 // Utility functions for booking flow
 export const bookingAPI = {
-  // Complete booking process using PUBLIC API
+  // Complete booking process using tenant-specific PUBLIC API
   completeBooking: async (bookingData, customerData = null) => {
     try {
       let user = await authAPI.getCurrentUser();
 
-      // If no user is logged in, use public reservation endpoint
+      // If no user is logged in, use tenant-specific public reservation endpoint
       if (!user && customerData) {
-        // Use public reservation API which auto-creates customer
+        // Use tenant-specific public reservation API which auto-creates customer
         const publicReservationData = {
           firstName: customerData.firstName,
           lastName: customerData.lastName,
-          email: customerData.email,
+          customerEmail: customerData.email, // This will be the customer's email
           phone: customerData.phone,
           licenseNumber: customerData.licenseNumber,
           carId: bookingData.selectedCarId,
@@ -237,7 +261,7 @@ export const bookingAPI = {
               street: bookingData.pickupLocation.address || bookingData.pickupLocation.street || '123 Main St',
               city: bookingData.pickupLocation.city || 'New York',
               state: bookingData.pickupLocation.state || 'NY',
-              postalCode: bookingData.pickupLocation.postalCode || '10001',
+              zipCode: bookingData.pickupLocation.postalCode || '10001',
               country: bookingData.pickupLocation.country || 'US'
             }
           },
@@ -247,7 +271,7 @@ export const bookingAPI = {
               street: bookingData.dropoffLocation.address || bookingData.dropoffLocation.street || '123 Main St',
               city: bookingData.dropoffLocation.city || 'New York',
               state: bookingData.dropoffLocation.state || 'NY',
-              postalCode: bookingData.dropoffLocation.postalCode || '10001',
+              zipCode: bookingData.dropoffLocation.postalCode || '10001',
               country: bookingData.dropoffLocation.country || 'US'
             }
           },
@@ -271,7 +295,7 @@ export const bookingAPI = {
             days: Math.ceil((new Date(bookingData.endDate) - new Date(bookingData.startDate)) / (1000 * 60 * 60 * 24))
           },
           user: result.customer,
-          credentials: result.credentials // Login credentials for new user
+          credentials: result.loginInfo // Login credentials for new user
         };
       }
 
