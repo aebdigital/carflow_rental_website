@@ -5,14 +5,14 @@ import googleIcon from '../assets/icons8-google-48.png';
 
 const TopBar = () => {
   return (
-    <div className="bg-accent text-black py-2 border-b">
+    <div style={{ backgroundColor: '#F3F4F6' }} className="text-black py-2 border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Left side - Contact buttons */}
           <div className="flex items-center space-x-2 md:space-x-4">
             <a 
               href="tel:+421907633517" 
-              className="flex items-center space-x-1 md:space-x-2 text-xs md:text-sm font-medium bg-white text-black hover:bg-gray-100 px-2 md:px-3 py-1 rounded transition-colors duration-200"
+              className="flex items-center space-x-1 md:space-x-2 text-xs md:text-sm font-medium bg-accent text-black hover:bg-yellow-400 px-2 md:px-3 py-1 rounded transition-colors duration-200"
             >
               <PhoneIcon className="h-4 w-4" />
               <span className="hidden sm:inline">+421 907 633 517</span>
@@ -20,7 +20,7 @@ const TopBar = () => {
             </a>
             <a 
               href="/contact" 
-              className="flex items-center space-x-1 md:space-x-2 text-xs md:text-sm font-medium bg-white text-black hover:bg-gray-100 px-2 md:px-3 py-1 rounded transition-colors duration-200"
+              className="flex items-center space-x-1 md:space-x-2 text-xs md:text-sm font-medium bg-accent text-black hover:bg-yellow-400 px-2 md:px-3 py-1 rounded transition-colors duration-200"
             >
               <EnvelopeIcon className="h-4 w-4" />
               <span className="hidden md:inline">NAPÍŠTE NÁM / FORMULÁR</span>
@@ -33,7 +33,7 @@ const TopBar = () => {
             <div className="flex items-center space-x-1">
               <a 
                 href="#" 
-                className="flex items-center space-x-1 hover:bg-white hover:text-black px-1 md:px-2 py-1 rounded transition-colors duration-200"
+                className="flex items-center space-x-1 hover:bg-gray-300 px-1 md:px-2 py-1 rounded transition-colors duration-200"
                 target="_blank" 
                 rel="noopener noreferrer"
               >
@@ -41,7 +41,7 @@ const TopBar = () => {
               </a>
               <a 
                 href="#" 
-                className="flex items-center space-x-1 hover:bg-white hover:text-black px-1 md:px-2 py-1 rounded transition-colors duration-200"
+                className="flex items-center space-x-1 hover:bg-gray-300 px-1 md:px-2 py-1 rounded transition-colors duration-200"
                 target="_blank" 
                 rel="noopener noreferrer"
               >
@@ -51,7 +51,7 @@ const TopBar = () => {
             <div className="ml-2 md:ml-3">
               <a 
                 href="#" 
-                className="flex items-center space-x-1 md:space-x-2 bg-white text-black hover:bg-gray-100 px-1 md:px-2 py-1 rounded transition-colors duration-200"
+                className="flex items-center space-x-1 md:space-x-2 bg-white text-black hover:bg-gray-100 px-1 md:px-2 py-1 rounded shadow-md transition-all duration-200"
                 target="_blank" 
                 rel="noopener noreferrer"
               >

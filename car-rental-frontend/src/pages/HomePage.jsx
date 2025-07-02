@@ -105,16 +105,11 @@ const HomePage = () => {
               Objavte slobodu cestovania s našou prémiovou flotilou vozidiel. 
               Od mestských áut až po luxusné SUV - máme to pravé auto pre vašu cestu.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <Link to="/fleet">
                 <Button size="large" className="w-full sm:w-auto">
-                  Preskúmať vozidlá
+                  Všetky vozidlá
                   <ArrowRightIcon className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/about">
-                <Button variant="outline" size="large" className="w-full sm:w-auto text-white border-white hover:bg-white hover:text-black">
-                  Zistiť viac
                 </Button>
               </Link>
             </div>
