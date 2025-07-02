@@ -5,6 +5,9 @@ import {
   MapPinIcon,
   ClockIcon 
 } from '@heroicons/react/24/outline';
+import facebookIcon from '../assets/facebook.png';
+import instagramIcon from '../assets/instagram.png';
+import googleIcon from '../assets/icons8-google-48.png';
 
 const Footer = () => {
   return (
@@ -17,19 +20,36 @@ const Footer = () => {
             <p className="text-gray-300 mb-4">
               Váš spoľahlivý partner pre prenájom vozidiel. Ponúkame širokú škálu prémiových vozidiel za konkurenčné ceny.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-accent transition-colors">
-                <span className="sr-only">Facebook</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
-                </svg>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-accent transition-colors">
-                <span className="sr-only">Instagram</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.014 5.367 18.647.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.328-1.297C4.243 14.814 3.5 13.455 3.5 11.987c0-1.467.743-2.827 1.621-3.704.88-.807 2.031-1.297 3.328-1.297 1.297 0 2.448.49 3.328 1.297.878.877 1.621 2.237 1.621 3.704 0 1.468-.743 2.827-1.621 3.704-.88.807-2.031 1.297-3.328 1.297z" clipRule="evenodd" />
-                </svg>
-              </a>
+            <div className="flex items-center">
+              <div className="flex items-center space-x-3">
+                <a 
+                  href="#" 
+                  className="flex items-center space-x-1 hover:bg-gray-800 px-2 py-1 rounded transition-colors duration-200"
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <img src={facebookIcon} alt="Facebook" className="h-6 w-6" />
+                </a>
+                <a 
+                  href="#" 
+                  className="flex items-center space-x-1 hover:bg-gray-800 px-2 py-1 rounded transition-colors duration-200"
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <img src={instagramIcon} alt="Instagram" className="h-6 w-6" />
+                </a>
+              </div>
+              <div className="ml-4">
+                <a 
+                  href="#" 
+                  className="flex items-center space-x-2 bg-white text-black hover:bg-gray-100 px-3 py-2 rounded transition-colors duration-200"
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
+                  <img src={googleIcon} alt="Google" className="h-4 w-4" />
+                  <span className="text-sm font-medium">Recenzie</span>
+                </a>
+              </div>
             </div>
           </div>
 

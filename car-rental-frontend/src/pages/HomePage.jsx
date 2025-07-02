@@ -13,6 +13,7 @@ import {
 import Button from '../components/Button';
 import CarCard from '../components/CarCard';
 import { carsAPI } from '../services/api';
+import headerBg from '../assets/header.webp';
 
 const HomePage = () => {
   const [startDate, setStartDate] = useState('');
@@ -90,8 +91,11 @@ const HomePage = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-primary via-blue-700 to-blue-800 text-white py-20">
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+      <section 
+        className="relative text-white py-20 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${headerBg})` }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -109,7 +113,7 @@ const HomePage = () => {
                 </Button>
               </Link>
               <Link to="/about">
-                <Button variant="outline" size="large" className="w-full sm:w-auto text-white border-white hover:bg-white hover:text-primary">
+                <Button variant="outline" size="large" className="w-full sm:w-auto text-white border-white hover:bg-white hover:text-black">
                   Zistiť viac
                 </Button>
               </Link>
@@ -118,42 +122,16 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Prečo si vybrať nás?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              S rokmi skúseností poskytujeme najlepšie služby prenájmu vozidiel na Slovensku
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent bg-opacity-10 rounded-full mb-4">
-                  <feature.icon className="h-8 w-8 text-accent" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       {/* Featured Cars Section */}
-      <section className="py-16">
+      <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Odporúčané vozidlá
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Vyberte si z našich najpopulárnejších vozidiel
-            </p>
+          
           </div>
 
           {loading ? (
@@ -186,6 +164,32 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Features Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Prečo si vybrať nás?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              S rokmi skúseností poskytujeme najlepšie služby prenájmu vozidiel na Slovensku
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div key={index} className="text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-accent bg-opacity-10 rounded-full mb-4">
+                  <feature.icon className="h-8 w-8 text-accent" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -214,23 +218,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-primary text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Pripravení na vašu ďalšiu cestu?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Rezervujte si vaše ideálne vozidlo už dnes a začnite svoju dokonalú cestu
-          </p>
-          <Link to="/fleet">
-            <Button size="large" className="bg-accent hover:bg-yellow-600 text-black">
-              Začať rezerváciu
-              <ArrowRightIcon className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-        </div>
-      </section>
+  
     </div>
   );
 };
