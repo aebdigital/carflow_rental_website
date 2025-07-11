@@ -9,6 +9,9 @@ export default {
       colors: {
         primary: '#000000',
         accent: '#FFD700',
+        green: {
+          custom: '#16A349',
+        },
         gray: {
           50: '#F9FAFB',
           100: '#F3F4F6',

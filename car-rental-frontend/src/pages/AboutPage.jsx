@@ -183,23 +183,8 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 bg-primary text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Pripravení zažiť výnimočnosť?</h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Pridajte sa k tisíckam spokojných zákazníkov, ktorí dôverujú AutoPožičovni pre svoje dopravné potreby
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/fleet" className="btn-accent">
-              Zobraziť našu flotilu
-            </a>
-            <a href="/contact" className="border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 rounded-lg font-medium transition-colors duration-200">
-              Kontaktujte nás dnes
-            </a>
-          </div>
-        </div>
-      </section>
+     
+      
     </div>
   );
 };

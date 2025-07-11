@@ -112,7 +112,7 @@ const CarCard = ({ car, selectedDates, unavailableDates = [] }) => {
 
         {/* Car Info */}
         <div className="mb-4">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">{carName} ({year})</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2 h-14 flex items-center leading-tight">{carName} ({year})</h3>
           
           {/* Availability Status for Selected Dates */}
           {selectedDates?.pickupDate && selectedDates?.returnDate && (

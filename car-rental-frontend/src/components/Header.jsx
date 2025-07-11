@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline';
+import TopBar from './TopBar';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -22,6 +23,7 @@ const Header = () => {
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
+      <TopBar />
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
@@ -53,9 +55,10 @@ const Header = () => {
           <div className="hidden md:flex items-center space-x-4">
             <Link
               to="/login"
-              className="text-gray-700 hover:text-accent px-3 py-2 text-sm font-medium transition-colors duration-200"
+              className="flex items-center space-x-2 bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
             >
-              Prihlásenie
+              <UserIcon className="h-4 w-4" />
+              <span>Prihlásenie</span>
             </Link>
             <Link
               to="/fleet"
@@ -103,10 +106,11 @@ const Header = () => {
               <div className="border-t border-gray-200 pt-4 space-y-1">
                 <Link
                   to="/login"
-                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-accent hover:bg-gray-50 transition-colors duration-200"
+                  className="flex items-center space-x-2 bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-lg text-base font-medium mx-3 transition-colors duration-200"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Prihlásenie
+                  <UserIcon className="h-4 w-4" />
+                  <span>Prihlásenie</span>
                 </Link>
                 <Link
                   to="/fleet"
