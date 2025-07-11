@@ -91,7 +91,11 @@ export const authAPI = {
 export const carsAPI = {
   // Get all available cars for admin@example.com tenant with advanced filtering
   getAvailableCars: async (filters = {}) => {
-    const queryParams = new URLSearchParams(filters);
+    // Remove any status filtering since the tenant endpoint returns available cars by default
+    const cleanFilters = { ...filters };
+    delete cleanFilters.status; // Remove status filter if present
+    
+    const queryParams = new URLSearchParams(cleanFilters);
 
     const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/cars?${queryParams}`, {
       headers: {
@@ -102,7 +106,14 @@ export const carsAPI = {
     const result = await handleResponse(response);
     console.log('Cars returned from API:', result.data?.length || 0, 'cars');
     console.log('Car data:', result.data);
-    return result.data || [];
+    
+    // Ensure all returned cars are treated as available
+    const cars = result.data || [];
+    return cars.map(car => ({
+      ...car,
+      // Set status to 'active' if not specified, since we're getting from available endpoint
+      status: car.status || 'active'
+    }));
   },
 
   // Get single car details for admin@example.com tenant

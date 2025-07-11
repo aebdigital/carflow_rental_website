@@ -29,8 +29,9 @@ const CarCard = ({ car, selectedDates, unavailableDates = [] }) => {
   // Combine brand and model for display name
   const carName = `${brand} ${model}`;
   
-  // Show only available cars or all cars in fleet view
-  const isAvailable = status === 'available';
+  // Since we're getting cars from the available cars API endpoint, assume they're available by default
+  // Only show as unavailable if explicitly marked as 'unavailable' or 'maintenance'
+  const isAvailable = status !== 'unavailable' && status !== 'maintenance' && status !== 'out-of-service';
 
   // Check if car is available for selected dates
   const isAvailableForDates = selectedDates?.pickupDate && selectedDates?.returnDate ? 
@@ -94,13 +95,7 @@ const CarCard = ({ car, selectedDates, unavailableDates = [] }) => {
               {category}
             </span>
           </div>
-          {!isAvailable && (
-            <div className="absolute top-3 right-3">
-              <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                Nedostupné
-              </span>
-            </div>
-          )}
+          {/* Only show unavailable banner for specific dates when dates are selected */}
           {selectedDates?.pickupDate && selectedDates?.returnDate && !isAvailableForDates && (
             <div className="absolute top-3 right-3">
               <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -130,18 +125,18 @@ const CarCard = ({ car, selectedDates, unavailableDates = [] }) => {
                 ) : (
                   <>
                     <ExclamationTriangleIcon className="h-4 w-4" />
-                    <span>Nedostupné pre vybrané dátumy</span>
+                    <span>Rezervované pre vybrané dátumy</span>
                   </>
                 )}
               </div>
             </div>
           )}
 
-          {/* General Availability Info */}
+          {/* General Availability Info - Show only if there are some reservations */}
           {!selectedDates?.pickupDate && unavailableDaysCount > 0 && (
-            <div className="mb-3 p-2 bg-yellow-50 border border-yellow-200 rounded-md text-sm text-yellow-800">
+            <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded-md text-sm text-blue-800">
               <div className="flex items-center space-x-1">
-                <ExclamationTriangleIcon className="h-4 w-4" />
+                <CalendarIcon className="h-4 w-4" />
                 <span>{unavailableDaysCount} dní rezervovaných v nasledujúcich 30 dňoch</span>
               </div>
             </div>
@@ -192,9 +187,10 @@ const CarCard = ({ car, selectedDates, unavailableDates = [] }) => {
             <div className="text-accent font-medium text-sm">
               Kliknite pre detail
             </div>
+            {/* Only show unavailable message for cars that are explicitly marked as unavailable */}
             {!isAvailable && (
               <div className="text-red-500 text-xs mt-1">
-                Momentálne nedostupné
+                Dočasne nedostupné
               </div>
             )}
           </div>

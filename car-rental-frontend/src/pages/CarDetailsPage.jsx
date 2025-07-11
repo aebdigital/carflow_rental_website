@@ -178,13 +178,12 @@ const CarDetailsPage = () => {
 
             {/* Car Image */}
             <div className="relative rounded-2xl overflow-hidden mb-8 shadow-lg">
-              {car.status === 'available' && (
-                <div className="absolute top-4 left-4 z-10">
-                  <span className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
-                    Dostupné na prenájom
-                  </span>
-                </div>
-              )}
+              {/* Show available badge by default since we're getting cars from available endpoint */}
+              <div className="absolute top-4 left-4 z-10">
+                <span className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                  Dostupné na prenájom
+                </span>
+              </div>
               <CarImage
                 car={car}
                 size="large"
@@ -423,9 +422,8 @@ const CarDetailsPage = () => {
                   onClick={handleBookNow}
                   fullWidth
                   className="mt-6"
-                  disabled={car.status !== 'available'}
                 >
-                  {car.status === 'available' ? 'Rezervovať teraz' : 'Momentálne nedostupné'}
+                  Rezervovať teraz
                 </Button>
               </div>
             </div>
