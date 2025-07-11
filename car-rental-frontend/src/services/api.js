@@ -11,7 +11,7 @@ const getToken = () => localStorage.getItem('authToken');
 const handleResponse = async (response) => {
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.message || 'API request failed');
+    throw new Error(data.message || data.error || 'API request failed');
   }
   return data;
 };
@@ -89,7 +89,7 @@ export const authAPI = {
 
 // Cars API (Using Tenant-Specific Public Endpoints)
 export const carsAPI = {
-  // Get all available cars for admin@example.com tenant
+  // Get all available cars for admin@example.com tenant with advanced filtering
   getAvailableCars: async (filters = {}) => {
     const queryParams = new URLSearchParams(filters);
 
@@ -132,10 +132,10 @@ export const carsAPI = {
       });
 
       const result = await handleResponse(response);
-      return result.data || { unavailableDates: [] };
+      return result.data || { isAvailable: false, isAvailableForDates: false };
     } catch (error) {
-      console.warn('Availability check failed, assuming all dates available:', error);
-      return { unavailableDates: [] };
+      console.warn('Availability check failed, assuming not available:', error);
+      return { isAvailable: false, isAvailableForDates: false };
     }
   },
 
@@ -161,6 +161,45 @@ export const carsAPI = {
 
     const result = await handleResponse(response);
     return result.data || [];
+  },
+
+  // Get car booking calendar
+  getCarCalendar: async (carId, startDate = null, endDate = null, includePending = true) => {
+    const queryParams = new URLSearchParams({
+      includePending: includePending.toString()
+    });
+    
+    if (startDate) queryParams.append('startDate', startDate.toISOString().split('T')[0]);
+    if (endDate) queryParams.append('endDate', endDate.toISOString().split('T')[0]);
+
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/cars/${carId}/calendar?${queryParams}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await handleResponse(response);
+    return result.data;
+  },
+
+  // Get reserved dates for multiple cars
+  getReservedDates: async (carIds = [], startDate = null, endDate = null, includePending = true) => {
+    const queryParams = new URLSearchParams({
+      includePending: includePending.toString()
+    });
+    
+    if (carIds.length > 0) queryParams.append('carIds', carIds.join(','));
+    if (startDate) queryParams.append('startDate', startDate.toISOString().split('T')[0]);
+    if (endDate) queryParams.append('endDate', endDate.toISOString().split('T')[0]);
+
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/cars/reserved-dates?${queryParams}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await handleResponse(response);
+    return result.data;
   }
 };
 
@@ -236,6 +275,89 @@ export const reservationsAPI = {
   }
 };
 
+// Website Settings API
+export const websiteAPI = {
+  // Get website settings for admin@example.com tenant
+  getSettings: async () => {
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/website-settings`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await handleResponse(response);
+    return result.data;
+  },
+
+  // Get active info bar
+  getInfoBar: async (page = 'all-pages') => {
+    const queryParams = new URLSearchParams({ page });
+
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/info-bar?${queryParams}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await handleResponse(response);
+    return result.data;
+  },
+
+  // Get active modal
+  getModal: async (page = 'all-pages') => {
+    const queryParams = new URLSearchParams({ page });
+
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/modal?${queryParams}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const result = await handleResponse(response);
+    return result.data;
+  }
+};
+
+// Marketing API
+export const marketingAPI = {
+  // Subscribe to newsletter
+  subscribeNewsletter: async (subscriberEmail, firstName = '', lastName = '') => {
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/newsletter`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        subscriberEmail,
+        firstName,
+        lastName
+      })
+    });
+
+    const result = await handleResponse(response);
+    return result;
+  },
+
+  // Verify discount code
+  verifyDiscountCode: async (code, reservationAmount, reservationDays = 1, carCategory = '') => {
+    const response = await fetch(`${API_BASE}/public/users/${encodeURIComponent(TENANT_EMAIL)}/verify-discount`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        code,
+        reservationAmount,
+        reservationDays,
+        carCategory
+      })
+    });
+
+    const result = await handleResponse(response);
+    return result;
+  }
+};
+
 // Utility functions for booking flow
 export const bookingAPI = {
   // Complete booking process using tenant-specific PUBLIC API
@@ -276,6 +398,15 @@ export const bookingAPI = {
             }
           },
           specialRequests: bookingData.specialRequests || '',
+          discountCode: bookingData.discountCode || '',
+          // Include frontend pricing override
+          pricing: {
+            dailyRate: bookingData.dailyRate || 50.00,
+            totalAmount: bookingData.totalAmount || 250.00,
+            rentalCost: bookingData.rentalCost || 250.00,
+            taxes: 0.00,
+            deposit: bookingData.deposit || 0.00
+          },
           // Optional fields
           dateOfBirth: customerData.dateOfBirth,
           licenseExpiry: customerData.licenseExpiry,
@@ -295,7 +426,8 @@ export const bookingAPI = {
             days: Math.ceil((new Date(bookingData.endDate) - new Date(bookingData.startDate)) / (1000 * 60 * 60 * 24))
           },
           user: result.customer,
-          credentials: result.loginInfo // Login credentials for new user
+          credentials: result.loginInfo, // Login credentials for new user
+          debug: result.debug // Debug information
         };
       }
 
@@ -340,6 +472,50 @@ export const bookingAPI = {
       console.error('Booking failed:', error.message);
       throw error;
     }
+  },
+
+  // Calculate pricing with discount
+  calculatePricing: async (carId, startDate, endDate, discountCode = null) => {
+    try {
+      const car = await carsAPI.getCarDetails(carId);
+      const days = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+      const rentalCost = car.pricing.dailyRate * days;
+      
+      let pricing = {
+        dailyRate: car.pricing.dailyRate,
+        days: days,
+        subtotal: rentalCost,
+        discountAmount: 0,
+        taxes: 0,
+        totalAmount: rentalCost,
+        deposit: car.pricing.deposit || 0
+      };
+
+      // Apply discount if provided
+      if (discountCode) {
+        try {
+          const discountResult = await marketingAPI.verifyDiscountCode(
+            discountCode, 
+            rentalCost, 
+            days, 
+            car.category
+          );
+          
+          if (discountResult.success && discountResult.valid) {
+            pricing.discountAmount = discountResult.data.discountAmount;
+            pricing.totalAmount = discountResult.data.finalAmount;
+            pricing.discountInfo = discountResult.data;
+          }
+        } catch (error) {
+          console.warn('Discount verification failed:', error);
+        }
+      }
+
+      return pricing;
+    } catch (error) {
+      console.error('Pricing calculation failed:', error);
+      throw error;
+    }
   }
 };
 
@@ -347,5 +523,7 @@ export default {
   auth: authAPI,
   cars: carsAPI,
   reservations: reservationsAPI,
+  website: websiteAPI,
+  marketing: marketingAPI,
   booking: bookingAPI
 }; 
